@@ -24,6 +24,8 @@ export default function App() {
     }
   }, [state.status])
 
+  const isExporting = state.status === "exporting"
+
   const handleAnalyze = () => {
     // MVP Constraint: Backend only parses files (PDF/DOCX). 
     // If user pasted text, we alert them to use a file instead.
@@ -74,8 +76,8 @@ export default function App() {
               analysis={state.data} 
               onReset={reset}
               onExportDocx={handleExportDocx}
-              isExporting={state.status === "exporting"}
-              rawBackendData={state.rawBackendData} // <--- ADD THIS LINE
+              isExporting={isExporting}
+              rawBackendData={state.rawBackendData}
             />
           </div>
         )}

@@ -1,0 +1,10 @@
+{
+  "phases": {
+    "build": {
+      "cmds": ["pnpm run build"]
+    }
+  },
+  "start": {
+    "cmd": "caddy file-server --listen :80 --root dist --try-files"
+  }
+}

@@ -5,6 +5,6 @@
     }
   },
   "start": {
-    "cmd": "caddy file-server --listen :80 --root dist --try-files"
+    "cmd": "caddy file-server --listen :80 --root dist"
   }
 }

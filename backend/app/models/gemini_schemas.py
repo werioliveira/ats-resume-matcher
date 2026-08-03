@@ -7,7 +7,7 @@ class MatchedKeyword(BaseModel):
 
 class MissingKeyword(BaseModel):
     keyword: str
-    suggestion: str = Field(description="Brief suggestion on where or how the user could add this keyword.")
+    suggestion: str = Field(description="Brief note on where in the optimized_resume this keyword was added (e.g., 'Added to Skills > Cloud').")
 
 
 class SectionFeedback(BaseModel):
@@ -44,9 +44,13 @@ class OptimizedResume(BaseModel):
 
 
 class AnalysisResult(BaseModel):
-    match_score: int = Field(ge=0, le=100, description="Overall ATS match percentage.")
-    summary_feedback: str = Field(description="A brief 2-3 sentence overall assessment of the resume vs the job description.")
-    matched_keywords: list[MatchedKeyword]
-    missing_keywords: list[MissingKeyword]
-    section_feedback: list[SectionFeedback]
+    # IMPORTANT: field order matters for structured generation — Gemini fills fields
+    # in the order they're declared here. optimized_resume MUST come first so that
+    # match_score/keywords/feedback (all computed FROM the optimized resume) are
+    # generated after it exists, not before.
     optimized_resume: OptimizedResume
+    match_score: int = Field(ge=0, le=100, description="ATS match percentage of the OPTIMIZED resume above (not the original) against the job description.")
+    summary_feedback: str = Field(description="A brief 2-3 sentence overall assessment of the optimized resume vs the job description.")
+    matched_keywords: list[MatchedKeyword]
+    missing_keywords: list[MissingKeyword] = Field(description="Keywords absent from the ORIGINAL resume that were added to the optimized_resume's Skills section — kept here for the user's transparency about what changed.")
+    section_feedback: list[SectionFeedback]
